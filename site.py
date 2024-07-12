@@ -14,7 +14,7 @@ def load_data(file_path):
     df['A'] = df['A'].fillna('')
     return df
 
-df = load_data(EXCEL_FILE_PATH)ㅋㅌ
+df = load_data(EXCEL_FILE_PATH)
 
 # TF-IDF 벡터화 도구 학습
 @st.cache_resource
