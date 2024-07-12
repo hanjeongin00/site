@@ -1,11 +1,10 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # 엑셀 파일 경로 설정 (실제 파일 경로로 변경하세요)
-EXCEL_FILE_PATH = 'Q&A.xlsx'
+EXCEL_FILE_PATH = '주히.xlsx'
 
 # 엑셀 파일 로드 및 데이터 전처리
 @st.cache_data
@@ -15,7 +14,7 @@ def load_data(file_path):
     df['A'] = df['A'].fillna('')
     return df
 
-df = load_data(EXCEL_FILE_PATH)
+df = load_data(EXCEL_FILE_PATH)ㅋㅌ
 
 # TF-IDF 벡터화 도구 학습
 @st.cache_resource
@@ -43,7 +42,7 @@ st.markdown(f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
         body {{
-            background-color: #FFFFD2;
+            background-color: #f5f5dc;
             font-family: 'Nanum Gothic', sans-serif;
             color: #333333;
         }}
@@ -71,21 +70,21 @@ st.markdown(f"""
             margin: 10px 0;
             width: 100%;
             border-radius: 10px;
-            border: 1px solid #A0D9E2;
+            border: 1px solid #0ABAB5;
             padding: 15px 30px;
-            color: #A0D9E2;
+            color: #0ABAB5;
             background-color: #ffffff;
             font-size: 1.2em;
             font-weight: 600;
             transition: all 0.3s ease-in-out;
         }}
         .stButton button:hover {{
-            background-color: #A0D9E2;
+            background-color: #0ABAB5;
             color: #ffffff;
             cursor: pointer;
         }}
         h1 {{
-            color: #A0D9E2;
+            color: #0ABAB5;
             text-align: center;
             font-weight: 700;
             margin-bottom: 0.5em;
@@ -93,7 +92,7 @@ st.markdown(f"""
         .header {{
             font-size: 2em;
             font-weight: bold;
-            color: #A0D9E2;
+            color: #0ABAB5;
             text-align: center;
             margin-bottom: 1em;
         }}
@@ -115,16 +114,16 @@ st.markdown(f"""
             margin: 10px 5px;
             width: auto;
             border-radius: 5px;
-            border: 1px solid #A0D9E2;
+            border: 1px solid #0ABAB5;
             padding: 8px 15px;
-            color: #A0D9E2;
+            color: #0ABAB5;
             background-color: #ffffff;
             font-size: 0.8em;
             font-weight: 600;
             transition: all 0.3s ease-in-out;
         }}
         .small-button:hover {{
-            background-color: #A0D9E2;
+            background-color: #0ABAB5;
             color: #ffffff;
             cursor: pointer;
         }}
@@ -138,36 +137,43 @@ if 'active_button' not in st.session_state:
 if 'conversation_history' not in st.session_state:
     st.session_state.conversation_history = [{"role": "system", "content": "You are a helpful assistant."}]
 
-st.title("나를 소개하는 페이지")
+st.title("나를 소개하는 페이지^^")
 
-with st.sidebar:
-    choose = option_menu("나를 소개합니다", ["홈", "아바타", "음악", "이름", "진로", "좋아하는 것", "MBTI", "성격"],
-                         icons=['bi bi-house-fill', 'bi bi-file-earmark-person', 'bi bi-file-earmark-music', 'bi bi-check-square-fill', 'bi bi-list-check', 'bi bi-calendar2-heart', 'bi bi-postcard-fill', 'bi bi-person-bounding-box'],
-                         menu_icon="bi bi-app-indicator", default_index=0,
-                         styles={
-        "container": {"padding": "5!important", "background-color": "#FFFFFF"},
-        "icon": {"color": "#B2CCFF", "font-size": "25px"},  # 아이콘 색상 변경
-        "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#DAD9FF"},
-    }
-    )
+# 사이드바에 버튼 배열
+st.sidebar.header("버튼을 클릭해보세요")
 
-if choose == "홈":
-    st.markdown(f"<div class='section'>환영합니다! 사이드바에서 아이콘을 눌러 내용을 확인해 보세요. 아래 질문도 가능합니다.</div>", unsafe_allow_html=True)
-elif choose == "아바타":
+large_buttons = {
+    "나의 아바타": "아바타.mp4",  # 이 경로를 실제 아바타 비디오 파일로 변경하세요.
+    "나를 표현한 음악": "음악.mp3"  # 이 경로를 실제 음악 파일로 변경하세요.
+}
+
+small_buttons = {
+    "나의 장점": "열정적이고, 문제 해결을 좋아합니다.",
+    "희망 진로": "소프트웨어 엔지니어가 되고 싶습니다.",
+    "좋아하는 것": "여행, 독서, 코딩을 좋아합니다.",
+    "싫어하는 것": "게으름, 미루는 습관을 싫어합니다.",
+    "자기 소개": "여기에 자기 소개를 추가하세요. 다른 학생들이 여러분을 더 잘 이해할 수 있도록 자세히 설명해주세요.",
+    "진로 준비": "여기에 진로를 위해 어떤 준비를 하고 있는지 구체적으로 설명해주세요.",
+    "취미 활동": "취미 활동에 대해 이야기하세요. 예를 들어, 스포츠, 음악, 예술 등에 대해 이야기할 수 있습니다.",
+    "성공 사례": "성공 사례를 공유하세요. 예를 들어, 프로젝트, 대회 수상, 특별한 경험 등에 대해 이야기할 수 있습니다."
+}
+
+for button, content in large_buttons.items():
+    if st.sidebar.button(button, key=button):
+        st.session_state.active_button = button if st.session_state.active_button != button else None
+
+if st.session_state.active_button == "나의 아바타":
     st.video("아바타.mp4", format="video/mp4", start_time=0)
-elif choose == "음악":
+
+if st.session_state.active_button == "나를 표현한 음악":
     st.audio("음악.mp3", format="audio/mp3")
-elif choose == "이름":
-    st.markdown(f"<div class='section'>한정인</div>", unsafe_allow_html=True)
-elif choose == "진로":
-    st.markdown(f"<div class='section'>예술 공학과 희망</div>", unsafe_allow_html=True)
-elif choose == "좋아하는 것":
-    st.markdown(f"<div class='section'>음악 좋아합니다.</div>", unsafe_allow_html=True)
-elif choose == "MBTI":
-    st.markdown(f"<div class='section'>ISFJ</div>", unsafe_allow_html=True)
-elif choose == "성격":
-    st.markdown(f"<div class='section'>낯을 많이 가리는 성격이지만 먼저 다가온다면 쉽게 친해질 수 있습니다.</div>", unsafe_allow_html=True)
+
+for button, content in small_buttons.items():
+    if st.sidebar.button(button, key=button):
+        st.session_state.active_button = button if st.session_state.active_button != button else None
+    if st.session_state.active_button == button:
+        st.markdown(f"<div class='section'>{content}</div>", unsafe_allow_html=True)
+
 
 # 유사도 임계값 슬라이더 추가
 threshold = st.slider("유사도 임계값", 0.0, 1.0, 0.43)
@@ -180,10 +186,9 @@ if st.button("검색", key="search", help="small"):
     if user_input:
         # 유사 질문 찾기
         similar_question, answer = get_most_similar_question(user_input, threshold)
-
+        
         if similar_question:
-            st.session_state.conversation_history.append(
-                {"role": "assistant", "content": f"유사한 질문: {similar_question}"})
+            st.session_state.conversation_history.append({"role": "assistant", "content": f"유사한 질문: {similar_question}"})
             st.session_state.conversation_history.append({"role": "assistant", "content": answer})
             st.write(f"**유사한 질문:** {similar_question}")
             st.write(f"**답변:** {answer}")
